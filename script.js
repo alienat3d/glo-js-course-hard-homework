@@ -1,24 +1,79 @@
 'use strict';
-
 /* 
-	1) Создать переменную num со значением 266219 (тип данных число)
-	2) Вывести в консоль произведение (умножение) цифр этого числа (1296)
-	Например: число 123, при помощи JavaScript получить каждую цифру ( 1, 2, 3 ) и перемножить их. Правильно использовать цикл или методы перебора.
-	3) Полученный результат возвести в степень 3, используя только 1 оператор (Math.pow не подходит)
-	4) Вывести в консоль первые 2 цифры полученного числа 
+1). Переменная lang может принимать 2 значения: 'ru' 'en'.
+Написать условия при котором в зависимости от значения lang будут выводится дни недели на русском или английском языке. Решите задачу
+	a) через if,
+	b) через switch-case
+	c) через многомерный массив без if'ов и switch’ей.
 */
-const num = 266219;
+const htmlTag = document.querySelector('html');
+const languageSwitchBtn = htmlTag.querySelector('.language-switcher');
 
-const string = num.toString();
+let currentLanguage = htmlTag.getAttribute('lang');
 
-let result = +string[0];
+const switchLanguage = function() { 
+	currentLanguage === 'ru' ? htmlTag.setAttribute('lang', 'en') 
+		: htmlTag.setAttribute('lang', 'ru');
+	
+	currentLanguage = htmlTag.getAttribute('lang');
 
-for (let index = 1; index < string.length; index++) {
-	result *= +string[index];
+	switch (currentLanguage) {
+		case 'ru':
+			console.clear();
+			console.log(
+				'Понедельник\n' + 
+				'\tВторник\n' + 
+				'\t\tСреда\n' + 
+				'\t\t\tЧетверг\n' + 
+				'\t\t\t\tПятница\n' + 
+				'\t\t\t\t\tСуббота\n' + 
+				'\t\t\t\t\t\tВоскресенье');
+			break;
+		case 'en':
+			console.clear();
+			console.log(
+				'Monday\n' + 
+				'\tTuesday\n' + 
+				'\t\tWednesday\n' + 
+				'\t\t\tThursday\n' + 
+				'\t\t\t\tFriday\n' + 
+				'\t\t\t\t\tSaturday\n' + 
+				'\t\t\t\t\t\tSunday');
+	}
 }
 
-console.log(result);
+languageSwitchBtn.addEventListener('click', switchLanguage);
 
-result **= 3;
+/* if (currentLanguage === 'ru') {
+	console.log(
+		'Понедельник\n' + 
+		'\tВторник\n' + 
+		'\t\tСреда\n' + 
+		'\t\t\tЧетверг\n' + 
+		'\t\t\t\tПятница\n' + 
+		'\t\t\t\t\tСуббота\n' + 
+		'\t\t\t\t\t\tВоскресенье');
+} else {
+	console.log(
+		'Monday\n' + 
+		'\tTuesday\n' + 
+		'\t\tWednesday\n' + 
+		'\t\t\tThursday\n' + 
+		'\t\t\t\tFriday\n' + 
+		'\t\t\t\t\tSaturday\n' + 
+		'\t\t\t\t\t\tSunday');
+} */
 
-console.log(result.toString().slice(0, 2));
+// * ======================== * \\
+
+/* 2). У нас есть переменная namePerson. Если значение этой переменной “Артём” то вывести в консоль “директор”, если значение “Александр” то вывести в консоль “преподаватель”, с любым другим значением вывести в консоль “студент”
+	Решить задачу с помощью нескольких тернарных операторов, без использования if или switch  */
+
+let namePerson;
+
+namePerson = 'Александр';
+
+namePerson === 'Артём' ? console.log('директор') : 
+	namePerson === 'Александр' 
+		? console.log('преподаватель') : 
+			console.log('студент');

@@ -1,0 +1,12 @@
+.wrapper {
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.language-switcher {
+	cursor: pointer;
+	width: 65px;
+	height: 65px;
+	background: url('switch-language.svg') no-repeat 0 / contain;
+}
