@@ -11,58 +11,77 @@ const languageSwitchBtn = htmlTag.querySelector('.language-switcher');
 
 let currentLanguage = htmlTag.getAttribute('lang');
 
-const switchLanguage = function() { 
-	currentLanguage === 'ru' ? htmlTag.setAttribute('lang', 'en') 
+const switchLanguage = function () {
+	currentLanguage === 'ru' ? htmlTag.setAttribute('lang', 'en')
 		: htmlTag.setAttribute('lang', 'ru');
-	
+
 	currentLanguage = htmlTag.getAttribute('lang');
 
-	switch (currentLanguage) {
+	let langsArray = [];
+	langsArray.ru = [
+		'Понедельник\n',
+		'\tВторник\n',
+		'\t\tСреда\n',
+		'\t\t\tЧетверг\n',
+		'\t\t\t\tПятница\n',
+		'\t\t\t\t\tСуббота\n',
+		'\t\t\t\t\t\tВоскресенье'];
+	langsArray.en = ['Monday\n',
+		'\tTuesday\n',
+		'\t\tWednesday\n',
+		'\t\t\tThursday\n',
+		'\t\t\t\tFriday\n',
+		'\t\t\t\t\tSaturday\n',
+		'\t\t\t\t\t\tSunday'];
+
+	console.clear();
+	console.log(langsArray[currentLanguage].join(''));
+	/* switch (currentLanguage) {
 		case 'ru':
-			console.clear();
 			console.log(
-				'Понедельник\n' + 
-				'\tВторник\n' + 
-				'\t\tСреда\n' + 
-				'\t\t\tЧетверг\n' + 
-				'\t\t\t\tПятница\n' + 
-				'\t\t\t\t\tСуббота\n' + 
+				'Понедельник\n' +
+				'\tВторник\n' +
+				'\t\tСреда\n' +
+				'\t\t\tЧетверг\n' +
+				'\t\t\t\tПятница\n' +
+				'\t\t\t\t\tСуббота\n' +
 				'\t\t\t\t\t\tВоскресенье');
 			break;
 		case 'en':
-			console.clear();
 			console.log(
-				'Monday\n' + 
-				'\tTuesday\n' + 
-				'\t\tWednesday\n' + 
-				'\t\t\tThursday\n' + 
-				'\t\t\t\tFriday\n' + 
-				'\t\t\t\t\tSaturday\n' + 
-				'\t\t\t\t\t\tSunday');
+				'Monday\n' +
+				'\tTuesday\n' +
+				'\t\tWednesday\n' +
+				'\t\t\tThursday\n' +
+				'\t\t\t\tFriday\n' +
+				'\t\t\t\t\tSaturday\n' +
+				'\t\t\t\t\t\tSunday'); 
 	}
+	*/
+	/* 
+	if (currentLanguage === 'ru') {
+		console.log(
+			'Понедельник\n' + 
+			'\tВторник\n' + 
+			'\t\tСреда\n' + 
+			'\t\t\tЧетверг\n' + 
+			'\t\t\t\tПятница\n' + 
+			'\t\t\t\t\tСуббота\n' + 
+			'\t\t\t\t\t\tВоскресенье');
+	} else {
+		console.log(
+			'Monday\n' + 
+			'\tTuesday\n' + 
+			'\t\tWednesday\n' + 
+			'\t\t\tThursday\n' + 
+			'\t\t\t\tFriday\n' + 
+			'\t\t\t\t\tSaturday\n' + 
+			'\t\t\t\t\t\tSunday');
+	} 
+*/
 }
 
 languageSwitchBtn.addEventListener('click', switchLanguage);
-
-/* if (currentLanguage === 'ru') {
-	console.log(
-		'Понедельник\n' + 
-		'\tВторник\n' + 
-		'\t\tСреда\n' + 
-		'\t\t\tЧетверг\n' + 
-		'\t\t\t\tПятница\n' + 
-		'\t\t\t\t\tСуббота\n' + 
-		'\t\t\t\t\t\tВоскресенье');
-} else {
-	console.log(
-		'Monday\n' + 
-		'\tTuesday\n' + 
-		'\t\tWednesday\n' + 
-		'\t\t\tThursday\n' + 
-		'\t\t\t\tFriday\n' + 
-		'\t\t\t\t\tSaturday\n' + 
-		'\t\t\t\t\t\tSunday');
-} */
 
 // * ======================== * \\
 
@@ -73,7 +92,7 @@ let namePerson;
 
 namePerson = 'Александр';
 
-namePerson === 'Артём' ? console.log('директор') : 
-	namePerson === 'Александр' 
-		? console.log('преподаватель') : 
-			console.log('студент');
+namePerson === 'Артём' ? console.log('директор') :
+	namePerson === 'Александр'
+		? console.log('преподаватель') :
+		console.log('студент');
