@@ -1,8 +1,10 @@
-.wrapper {
-	margin-top: 20%;
+body {
+	padding-top: 20%;
+
+}
+div {
 	margin-left: auto;
 	margin-right: auto;
-	height: 100vh;
-	width: 50vw;
+	width: 10%;
 	font-size: 30px;
 }
