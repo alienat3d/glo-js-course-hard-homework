@@ -1,35 +1,99 @@
 'use strict';
-
 /* 
-1) Создать массив week и записать в него дни недели в виде строк
-Вывести на экран все дни недели
-Каждый из них с новой строчки
-Выходные дни - курсивом
-Текущий день - жирным шрифтом(использовать объект даты)
+1) Если пользователь введет одинаковый ответ на вопрос "Какой дополнительный тип услуги нужен?" то необходимо не перезаписывать, а сохранять оба ответа в appData.services, добавить каждому названию ключа уникальность!
+
+2) Посчитать свойство appData.screenPrice методом reduce
 */
+const appData = {
+	ROLLBACK: 5,
+	title: '',
+	screens: [],
+	screenPrice: 0,
+	adaptive: true,
+	allServicePrices: 0,
+	fullPrice: 0,
+	servicePercentPrice: 0,
+	services: {},
+	ask: function () {
+		do {
+			appData.title = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки');
+		} while (appData.isNumber(appData.title));
 
-// * ==================== Усложнённое задание ==================== * \\
+		for (let i = 0; i < 2; i++) {
+			let name = '';
+			let price = 0;
 
-const week = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
-const date = new Date();
-const weekdayToday = date.getDay();
-let weekDays = [];
+			do {
+				name = prompt('Какие типы экранов нужно разработать?');
+			} while (appData.isNumber(name));
 
-for (const item of week) {
-	weekDays.push(item);
+			do {
+				price = prompt('Сколько будет стоить данная работа? (₽)');
+			} while (!appData.isNumber(price));
+
+			appData.screens.push({ id: i, name, price });
+		}
+
+		for (let i = 0; i < 2; i++) {
+			let name = '';
+			let price = 0;
+
+			do {
+				name = prompt('Какой дополнительный тип услуги нужен?');
+			} while (appData.isNumber(name));
+
+			do {
+				price = prompt('Сколько будет стоить данная работа? (₽)');
+			} while (!appData.isNumber(price));
+
+			appData.services[name] = +price;
+		}
+	},
+	addPrices: function () {
+		for (const screen of appData.screens) {
+			appData.screenPrice += +screen.price;
+		}
+
+		for (const price in appData.services) {
+			appData.allServicePrices += appData.services[price];
+		}
+	},
+	isNumber: function (num) {
+		return !isNaN(parseFloat(num)) && isFinite(num);
+	},
+	getFullPrice: function () {
+		appData.fullPrice = +appData.screenPrice + appData.allServicePrices;
+	},
+	getTitle: function () {
+		appData.title = appData.title.trim()[0].toUpperCase() + appData.title.trim().substring(1).toLowerCase();
+	},
+	getServicePercentPrice: function () {
+		appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (appData.ROLLBACK / 100));
+	},
+	getRollbackMessage: function (price) {
+		if (price >= 30000) {
+			return "Даем скидку в 10%";
+		} else if (price >= 15000 && price < 30000) {
+			return "Даем скидку в 5%";
+		} else if (price >= 0 && price < 15000) {
+			return "Скидка не предусмотрена";
+		} else {
+			return "Что-то пошло не так";
+		}
+	},
+	start: function () {
+		appData.ask();
+		appData.addPrices();
+		appData.getFullPrice();
+		appData.getServicePercentPrice();
+		appData.getTitle();
+		appData.logger();
+	},
+	logger: function () {
+		console.log(appData.fullPrice);
+		console.log(appData.servicePercentPrice);
+		console.log(appData.screens);
+	}
 }
 
-weekDays.forEach(function(weekday, index) {
-	const div = document.createElement('div');
-	
-	div.textContent = weekday;
-
-	if (weekday === 'Суббота' || weekday === 'Воскресенье' ) {
-		div.style.fontStyle = 'italic';
-	}
-	if (index + 1 === weekdayToday) {
-		div.style.fontWeight = 700;
-	}
-
-	document.body.appendChild(div);
-});
+appData.start();
