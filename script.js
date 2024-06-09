@@ -1,99 +1,58 @@
 'use strict';
 /* 
-1) Если пользователь введет одинаковый ответ на вопрос "Какой дополнительный тип услуги нужен?" то необходимо не перезаписывать, а сохранять оба ответа в appData.services, добавить каждому названию ключа уникальность!
-
-2) Посчитать свойство appData.screenPrice методом reduce
+1) Выведите на страницу текущую дату и время в 2-х форматах:
+	a) 'Сегодня Вторник, 4 февраля 2020 года, 21 час 5 минут 33 секунды'
+	б) '04.02.2020 - 21:05:33'
+2) Для вывода в формате (а) напишите функцию, которая будет менять склонение слов в зависимости от числа, "час, часов, часа"
+3) Для вывода в формате (б) напишите функцию, которая будет добавлять 0 перед значениями которые состоят из одной цифры (из 9:5:3 1.6.2019 сделает 09:05:03 01.06.2019)
+4) С помощью функции setInterval, реализуйте обновление даты и времени каждую секунду
 */
-const appData = {
-	ROLLBACK: 5,
-	title: '',
-	screens: [],
-	screenPrice: 0,
-	adaptive: true,
-	allServicePrices: 0,
-	fullPrice: 0,
-	servicePercentPrice: 0,
-	services: {},
-	ask: function () {
-		do {
-			appData.title = prompt('Как называется ваш проект?', ' КаЛьКулятор Верстки');
-		} while (appData.isNumber(appData.title));
 
-		for (let i = 0; i < 2; i++) {
-			let name = '';
-			let price = 0;
+const fullDateBlock = document.getElementById('full-date');
+const compactDateBlock = document.getElementById('compact-date');
+const date = new Date();
+const dayNum = date.getDay();
+const dateNum = date.getDate();
+const monthNum = date.getMonth();
+const yearNum = date.getFullYear();
+const hours = date.getHours();
+const minutes = date.getMinutes();
+const seconds = date.getSeconds();
+const dayNamesArray = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
+const monthNamesArray = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+const wordHoursArray = ['час', 'часа', 'часов'];
+const wordMinutesArray = ['минута', 'минуты', 'минут'];
+const wordSecondsArray = ['секунда', 'секунды', 'секунд'];
 
-			do {
-				name = prompt('Какие типы экранов нужно разработать?');
-			} while (appData.isNumber(name));
+// console.log(seconds);
 
-			do {
-				price = prompt('Сколько будет стоить данная работа? (₽)');
-			} while (!appData.isNumber(price));
+let currentDayName = '';
+let currentMonthName = '';
 
-			appData.screens.push({ id: i, name, price });
+/* const getProperName = (array, ref, variable) => {
+	array.forEach((item, idx) => {
+		if (idx === ref) {
+			variable = item;
 		}
+	});
+} */
+// getProperName(dayNamesArray, dayNum, currentDayName);
 
-		for (let i = 0; i < 2; i++) {
-			let name = '';
-			let price = 0;
-
-			do {
-				name = prompt('Какой дополнительный тип услуги нужен?');
-			} while (appData.isNumber(name));
-
-			do {
-				price = prompt('Сколько будет стоить данная работа? (₽)');
-			} while (!appData.isNumber(price));
-
-			appData.services[name] = +price;
-		}
-	},
-	addPrices: function () {
-		for (const screen of appData.screens) {
-			appData.screenPrice += +screen.price;
-		}
-
-		for (const price in appData.services) {
-			appData.allServicePrices += appData.services[price];
-		}
-	},
-	isNumber: function (num) {
-		return !isNaN(parseFloat(num)) && isFinite(num);
-	},
-	getFullPrice: function () {
-		appData.fullPrice = +appData.screenPrice + appData.allServicePrices;
-	},
-	getTitle: function () {
-		appData.title = appData.title.trim()[0].toUpperCase() + appData.title.trim().substring(1).toLowerCase();
-	},
-	getServicePercentPrice: function () {
-		appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (appData.ROLLBACK / 100));
-	},
-	getRollbackMessage: function (price) {
-		if (price >= 30000) {
-			return "Даем скидку в 10%";
-		} else if (price >= 15000 && price < 30000) {
-			return "Даем скидку в 5%";
-		} else if (price >= 0 && price < 15000) {
-			return "Скидка не предусмотрена";
-		} else {
-			return "Что-то пошло не так";
-		}
-	},
-	start: function () {
-		appData.ask();
-		appData.addPrices();
-		appData.getFullPrice();
-		appData.getServicePercentPrice();
-		appData.getTitle();
-		appData.logger();
-	},
-	logger: function () {
-		console.log(appData.fullPrice);
-		console.log(appData.servicePercentPrice);
-		console.log(appData.screens);
+dayNamesArray.forEach((item, idx) => {
+	if (idx === dayNum) {
+		currentDayName = item;
 	}
-}
+});
 
-appData.start();
+monthNamesArray.forEach((item, idx) => {
+	if (idx === monthNum) {
+		currentMonthName = item;
+	}
+});
+
+console.log(currentMonthName);
+/* currentDayName = getProperName(dayNamesArray, dayNum);
+currentMonthName = getProperName(monthNamesArray, monthNum); */
+// console.log(currentDayName);
+
+fullDateBlock.textContent = 'Сегодня ' + currentDayName + ', ' + dateNum + ' ' + currentMonthName + ' ' + yearNum + ' года, ' + hours + ' час ' + minutes + ' минут ' + seconds + ' секунды';
