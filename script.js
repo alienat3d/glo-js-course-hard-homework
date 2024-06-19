@@ -1,73 +1,82 @@
 'use strict';
 /* 
-1) Выведите на страницу текущую дату и время в 2-х форматах:
-	a) 'Сегодня Вторник, 4 февраля 2020 года, 21 час 5 минут 33 секунды'
-	б) '04.02.2020 - 21:05:33'
-2) Для вывода в формате (а) напишите функцию, которая будет менять склонение слов в зависимости от числа, "час, часов, часа"
-3) Для вывода в формате (б) напишите функцию, которая будет добавлять 0 перед значениями которые состоят из одной цифры (из 9:5:3 1.6.2019 сделает 09:05:03 01.06.2019)
-4) С помощью функции setInterval, реализуйте обновление даты и времени каждую секунду
+[✓] 1) Используя функцию-конструктор DomElement из основного задания №1, создать квадрат 100 на 100 пикселей. Ему необходимо задать фон(background) любого цвета и свойство position: absolute.
+[✓] 2) Поместить его на страницу только после выполнения события DOMContentLoaded. Внутри тега body должно быть только подключение скрипта. (В случае подключения файла скрипта к странице перед закрывающим тэгом body)
+[✓] 3) Написать обработчик события для keydown, который будет принимать callback-функцию. Данная функция будет отлавливать нажатие на стрелки клавиатуры. В зависимости от нажатой кнопки(Вверх - стрелка вверх, Влево - стрелка влево, Вправо - стрелка вправо, Вниз - стрелка вниз) наш квадрат будет перемещаться на 10 пикселей при каждом нажатии.
 */
-const longDateBlock = document.getElementById('long-date');
-const shortDateBlock = document.getElementById('short-date');
+const DomElement = function (selector, height, width, bg, fontSize, text, position) {
+	this.selector = selector;
+	this.height = height;
+	this.width = width;
+	this.bg = bg;
+	this.fontSize = fontSize;
+	this.text = text;
+	this.position = position;
 
-const dayNamesArray = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
-const monthNamesArray = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-const wordHoursArray = ['час', 'часа', 'часов'];
-const wordMinutesArray = ['минута', 'минуты', 'минут'];
-const wordSecondsArray = ['секунда', 'секунды', 'секунд'];
+	this.createElem = function () {
+		const prefixSelector = this.selector.slice(0, 1);
+		const mainElem = document.querySelector('main');
+		let element;
 
-const getTimerWords = (value, words) => {
-	value = Math.abs(value) % 100;
-	const lastNum = value % 10;
-	switch (true) {
-		case lastNum > 1 && lastNum < 5:
-			return words[1];
-		case lastNum === 1:
-			return words[0];
-		default:
-			return words[2];
+		if (prefixSelector === '.') {
+			element = document.createElement('div');
+			element.classList.add(this.selector.substring(1));
+		} else if (prefixSelector === '#') {
+			element = document.createElement('p');
+			element.setAttribute('id', this.selector.substring(1));
+		} else {
+			console.error('Проверьте селектор, разрешены для ввода только класс (".") и id ("#")');
+		}
+
+		element.style.cssText = `
+			height: ${this.height};
+			width: ${this.width};
+			background: ${this.bg};
+			font-size: ${this.fontSize};
+			position: ${this.position};
+		`;
+
+		element.textContent = this.text;
+
+		mainElem.append(element);
 	}
 }
 
-const tickingClockNDate = () => {
-	const date = new Date();
-	const dayNum = date.getDay();
-	const dateNum = date.getDate();
-	let monthNum = date.getMonth();
-	const yearNum = date.getFullYear();
-	const hours = date.getHours();
-	const minutes = date.getMinutes();
-	const seconds = date.getSeconds();
+const newDivElement = new DomElement('.some-block', '100px', '100px', 'yellow', '20px', 'The quick brown fox jumps over the lazy dog', 'absolute');
 
-	const fDateNum = dateNum < 10 ? '0' + dateNum : dateNum;
-	const fHours = hours < 10 ? '0' + hours : hours;
-	const fMinutes = minutes < 10 ? '0' + minutes : minutes;
-	const fSeconds = seconds < 10 ? '0' + seconds : seconds;
+document.addEventListener('DOMContentLoaded', () => {
+	newDivElement.createElem();
 
-	let currentDayName = '';
-	let currentMonthName = '';
-	let wordHours = '';
-	let wordMinutes = '';
-	let wordSeconds = '';
+	const elem = document.querySelector('.some-block');
 
-	currentDayName = dayNamesArray.find(function (item, idx) {
-		return idx === dayNum;
+	let elemYPosition = 0;
+	let elemXPosition = 0;
+
+	window.addEventListener('keydown', function (evt) {
+		switch (true) {
+			case evt.key === 'ArrowDown':
+				console.log('You pressed "↓" key');
+				elemYPosition = parseInt(elemYPosition) + 10 + 'px';
+				elem.style.top = elemYPosition;
+				break;
+			case evt.key === 'ArrowUp':
+				console.log('You pressed "↑" key');
+				elemYPosition = parseInt(elemYPosition) - 10 + 'px';
+				elem.style.top = elemYPosition;
+				break;
+			case evt.key === 'ArrowLeft':
+				console.log('You pressed "←" key');
+				elemXPosition = parseInt(elemXPosition) - 10 + 'px';
+				elem.style.left = elemXPosition;
+				break;
+			case evt.key === 'ArrowRight':
+				console.log('You pressed "→" key');
+				elemXPosition = parseInt(elemXPosition) + 10 + 'px';
+				elem.style.left = elemXPosition;
+				break;
+			default:
+				console.warn('Нажмите на одну из кнопок-стрелок на клавиатуре');
+				break;
+		}
 	})
-	currentMonthName = monthNamesArray.find(function (item, idx) {
-		return idx === monthNum;
-	})
-
-	const fMonth = ++monthNum < 10 ? '0' + monthNum : monthNum;
-
-	wordHours = getTimerWords(hours, wordHoursArray);
-	wordMinutes = getTimerWords(minutes, wordMinutesArray);
-	wordSeconds = getTimerWords(seconds, wordSecondsArray);
-
-	longDateBlock.innerHTML = 'Сегодня ' + currentDayName + ', ' + dateNum + ' ' + currentMonthName + ' ' + yearNum + ' года, ' + hours + ' ' + wordHours + ' ' + minutes + ' ' + wordMinutes + ' ' + seconds + ' ' + wordSeconds;
-
-	shortDateBlock.textContent = fHours + ':' + fMinutes + ':' + fSeconds + ' / ' + fDateNum + '.' + fMonth + '.' + yearNum;
-}
-
-tickingClockNDate();
-
-setInterval(tickingClockNDate, 200);
+});
