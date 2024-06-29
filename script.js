@@ -40,6 +40,7 @@ const appData = {
 
 			do {
 				const answer = prompt('Какой дополнительный тип услуги нужен?');
+				// [1]
 				if (appData.services[answer]) {
 					name = answer + '-' + i;
 				} else {
@@ -55,9 +56,13 @@ const appData = {
 		}
 	},
 	addPrices: function () {
-		for (const screen of appData.screens) {
-			appData.screenPrice += +screen.price;
-		}
+		// for (const screen of appData.screens) {
+		// 	appData.screenPrice += +screen.price;
+		// }
+		// [2]
+		appData.screenPrice = appData.screens.reduce(function(sum, item) {
+			return sum + +item.price;
+		}, 0)
 
 		for (const price in appData.services) {
 			appData.allServicePrices += appData.services[price];
