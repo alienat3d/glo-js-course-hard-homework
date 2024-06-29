@@ -34,12 +34,17 @@ const appData = {
 			appData.screens.push({ id: i, name, price });
 		}
 
-		for (let i = 0; i < 2; i++) {
+		for (let i = 1; i < 3; i++) {
 			let name = '';
 			let price = 0;
 
 			do {
-				name = prompt('Какой дополнительный тип услуги нужен?');
+				const answer = prompt('Какой дополнительный тип услуги нужен?');
+				if (appData.services[answer]) {
+					name = answer + '-' + i;
+				} else {
+					name = answer;
+				}
 			} while (appData.isNumber(name));
 
 			do {
@@ -93,6 +98,7 @@ const appData = {
 		console.log(appData.fullPrice);
 		console.log(appData.servicePercentPrice);
 		console.log(appData.screens);
+		console.log(appData.services);
 	}
 }
 
