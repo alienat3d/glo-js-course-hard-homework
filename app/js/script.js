@@ -1,6 +1,6 @@
 'use strict';
 /* 
-[] 1. Сделать так, чтоб после нажатия на кнопку Рассчитать изменение значения input[type=range] меняло и сумму в поле с подписью "Стоимость с учетом отката". Сумма должна пересчитываться с учетом реального значения процента отката. Проверить чтоб значение не менялось до расчета, только после расчета.
+[✓] 1. Сделать так, чтоб после нажатия на кнопку Рассчитать изменение значения input[type=range] меняло и сумму в поле с подписью "Стоимость с учетом отката". Сумма должна пересчитываться с учетом реального значения процента отката. Проверить чтоб значение не менялось до расчета, только после расчета.
 */
 
 const title = document.getElementsByTagName('h1')[0];
@@ -67,7 +67,7 @@ const appData = {
 	operateRangeInput: function () {
 		rollbackControllerValue.textContent = rollbackController.value + ' %';
 		appData.rollback = +rollbackController.value;
-		appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (appData.rollback / 100));
+		appData.servicePercentPrice = Math.round(appData.fullPrice - (appData.fullPrice * (appData.rollback / 100)));
 		totalCountRollback.value = appData.servicePercentPrice;
 	},
 	// == / [1] ==
