@@ -1,10 +1,11 @@
 'use strict';
 /* 
-[] 1) В нашем проекте (в верстке) есть input[type=checkbox] с id=cms-open. При его выборе должен открываться блок с классом hidden-cms-variants.
+[✓] 1) В нашем проекте (в верстке) есть input[type=checkbox] с id=cms-open. При его выборе должен открываться блок с классом hidden-cms-variants.
 Внимание, блоку с классом hidden-cms-variants необходимо добавлять свойство display: flex, а не display: block.
-[] 2) При выборе option с значением "Другое" (value=other) должен открываться блок с классом main-controls__input, но только тот, что внутри блока с классом hidden-cms-variants (ВНИМАНИЕ, блоков с классом main-controls__input в проекте много, искать стоит внутри определенного элемента)
-[] 3) Если в input[type=checkbox] выбран вариант с числовым value (value=50) то высчитываем общую стоимость работы с учетом данного value. Значение - процент от общей стоимости работы
 
+[✓] 2) При выборе option с значением "Другое" (value=other) должен открываться блок с классом main-controls__input, но только тот, что внутри блока с классом hidden-cms-variants (ВНИМАНИЕ, блоков с классом main-controls__input в проекте много, искать стоит внутри определенного элемента)
+
+[] 3) Если в input[type=checkbox] выбран вариант с числовым value (value=50) то высчитываем общую стоимость работы с учетом данного value. Значение + процент от общей стоимости работы
 Пример: общая стоимость работы равна 30.000. При выборе варианта WordPress с value=50 стоимость работы рассчитывается так: 30.000 + 15.000 = 45.000 (15.000 это 50% от 30.000)
 
 [] 4) При нажатии на кнопку Сброс метод reset() должен возвращать в исходное состояние и блок с классом hidden-cms-variants
@@ -17,6 +18,12 @@ const plusBtn = document.querySelector('.screen-btn');
 const optionPercentCheckboxes = document.querySelectorAll('.other-items.percent');
 const optionNumCheckboxes = document.querySelectorAll('.other-items.number');
 const optionCheckboxes = document.querySelectorAll('.main-controls__checkbox .custom-checkbox');
+// == [hw] ==
+const сmsCheckbox = document.getElementById('cms-open');
+const сmsOptionsBlock = document.querySelector('.hidden-cms-variants');
+const сmsOptionsSelect = сmsOptionsBlock.querySelector('#cms-select');
+const сmsOtherInput = сmsOptionsBlock.querySelector('.main-controls__input');
+// == / [hw] ==
 const rollbackController = document.querySelector('.rollback input');
 const rollbackControllerValue = document.querySelector('.rollback .range-value');
 const total = document.getElementsByClassName('total-input')[0];
@@ -40,6 +47,7 @@ const appData = {
 	rollback: 0,
 	fullPrice: 0,
 	servicePercentPrice: 0,
+	cmsPercentPrice: 0,
 	servicesPercent: {},
 	servicesNumber: {},
 	init() {
@@ -60,6 +68,13 @@ const appData = {
 		});
 		plusBtn.addEventListener('click', () => this.addScreenBlock());
 		rollbackController.addEventListener('input', () => this.operateRangeInput());
+		// == [hw] ==
+		сmsCheckbox.addEventListener('change', () => this.showCmsOptionsBlock());
+		сmsOptionsSelect.addEventListener('change', () => {
+			// if (сmsOptionsSelect.selectedIndex > 0) this.addCmsPrice();
+			if (сmsOptionsSelect.value = 'other') this.showCmsOtherInput();
+		});
+		// == / [hw] ==
 	},
 	start() {
 		this.addScreens();
@@ -80,7 +95,7 @@ const appData = {
 	isNumber(num) {
 		return !isNaN(parseFloat(num)) && isFinite(num);
 	},
-	disableEnableInputs (value) {
+	disableEnableInputs(value) {
 		screenSelects.forEach(select => select.disabled = value);
 		screenInputs.forEach(input => input.disabled = value);
 		optionCheckboxes.forEach(checkbox => checkbox.disabled = value);
@@ -196,6 +211,25 @@ const appData = {
 		screens[0].querySelector('select').selectedIndex = 0;
 		optionCheckboxes.forEach(checkbox => checkbox.checked = false);
 	},
+	// == [hw] ==
+	showCmsOptionsBlock() {
+		сmsOptionsBlock.style.display = 'flex';
+	},
+	showCmsOtherInput() {
+		сmsOtherInput.style.display = 'flex';
+	},
+	addCmsPrice() {
+		if (this.fullPrice > 0) {
+			if (сmsOptionsSelect.value = 'other') {
+				this.fullPrice += +сmsOtherInput.value;
+				console.log(appData.fullPrice);
+			} else {
+				this.fullPrice += +сmsOptionsSelect.value;
+				console.log(appData.fullPrice);
+			}
+		}
+	},
+	// == / [hw] ==
 	logger() {
 		console.log(this.screens);
 	}
