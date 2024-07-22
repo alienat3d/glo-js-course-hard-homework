@@ -9,7 +9,7 @@
 
 [✓] 4. Замените в документе домены вида http://site.ru на <a href="http://site.ru">site.ru</a>, 
 
-[] 5. Напишите регулярное выражение для поиска цвета, заданного как #ABCDEF, вывести цвет в консоль
+[✓] 5. Напишите регулярное выражение для поиска цвета, заданного как #ABCDEF, вывести цвет в консоль
 
 [✓] 6. Ссылки такого вида http://site.ru/aaaa/bbbb.html заменить
 на <a href="http://site.ru/aaaa/bbbb.html">site.ru</a>
@@ -39,8 +39,13 @@ const addTagLinkToLongUrls = () =>
 	body.innerHTML = body.innerHTML.replace(/(http\:\/\/)(\w+\.)(\w+\.\w+)([\w\/\-]+)+/gi, (str, $1, $2, $3, $4) => {
 		return `<a href="${str}">${$3}</a>`;
 	});
+const findColor = () => {
+	const color = body.innerHTML.match(/\bcolor\:\s\#\w+/gi);
+	console.log('color', color)
+}
 addTagMark();
 addTagStrong();
 addTagB();
 // addTagLinkToShortUrls();
 addTagLinkToLongUrls();
+findColor();
