@@ -82,7 +82,23 @@ const switchLanguage = function () {
 }
 
 languageSwitchBtn.addEventListener('click', switchLanguage);
-
+let langsArray = [];
+	langsArray.ru = [
+		'Понедельник\n',
+		'\tВторник\n',
+		'\t\tСреда\n',
+		'\t\t\tЧетверг\n',
+		'\t\t\t\tПятница\n',
+		'\t\t\t\t\tСуббота\n',
+		'\t\t\t\t\t\tВоскресенье'];
+	langsArray.en = ['Monday\n',
+		'\tTuesday\n',
+		'\t\tWednesday\n',
+		'\t\t\tThursday\n',
+		'\t\t\t\tFriday\n',
+		'\t\t\t\t\tSaturday\n',
+		'\t\t\t\t\t\tSunday'];
+console.log(langsArray);
 // * ======================== * \\
 
 /* 2). У нас есть переменная namePerson. Если значение этой переменной “Артём” то вывести в консоль “директор”, если значение “Александр” то вывести в консоль “преподаватель”, с любым другим значением вывести в консоль “студент”
