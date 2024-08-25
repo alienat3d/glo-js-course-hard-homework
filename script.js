@@ -13,8 +13,6 @@ const currencyOutputs = document.querySelectorAll('.converter__currency-output')
 const userInput = document.querySelector('.currency__datainput-input');
 let currentCurrency;
 let currentRubles;
-console.log(currentRubles);
-
 
 const getData = () => {
 	return fetch(API_URL)
@@ -26,7 +24,7 @@ const getData = () => {
 			}
 		})
 		.catch(error => {
-			error => console.warn(error)
+			error => console.warn(error);
 		});
 }
 
