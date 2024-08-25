@@ -1,114 +1,103 @@
 'use strict';
 /* 
-1). Переменная lang может принимать 2 значения: 'ru' 'en'.
-Написать условия при котором в зависимости от значения lang будут выводится дни недели на русском или английском языке. Решите задачу
-	a) через if,
-	b) через switch-case
-	c) через многомерный массив без if'ов и switch’ей.
+1) В отдельном репозитории реализовать приложение конвертер валют
+2) С помощью API - https://openexchangerates.org/ или https://exchangeratesapi.io/ получить стоимость доллара и евро (не обязательно использовать этот api , есть и другие)
+3) На странице должен быть select или radio кнопки с выбором валюты USD или EUR
+4) Добавьте на страницу input, вводим количество валюты и получаем количество рублей пример
+5) Так же возможность конвертировать обратно из рублей в валюту 
 */
-const htmlTag = document.querySelector('html');
-const languageSwitchBtn = htmlTag.querySelector('.language-switcher');
+const API_URL = 'https://openexchangerates.org/api/latest.json?app_id=0ded2e02288e415ba5843b1bfb604777';
 
-let currentLanguage = htmlTag.getAttribute('lang');
+const currencyChoiceInputs = document.querySelectorAll('.currency__choice-input');
+const currencyOutputs = document.querySelectorAll('.converter__currency-output');
+const userInput = document.querySelector('.currency__datainput-input');
+let currentCurrency;
+let currentRubles;
+console.log(currentRubles);
 
-const switchLanguage = function () {
-	currentLanguage === 'ru' ? htmlTag.setAttribute('lang', 'en')
-		: htmlTag.setAttribute('lang', 'ru');
 
-	currentLanguage = htmlTag.getAttribute('lang');
-
-	let langsArray = [];
-	langsArray.ru = [
-		'Понедельник\n',
-		'\tВторник\n',
-		'\t\tСреда\n',
-		'\t\t\tЧетверг\n',
-		'\t\t\t\tПятница\n',
-		'\t\t\t\t\tСуббота\n',
-		'\t\t\t\t\t\tВоскресенье'];
-	langsArray.en = ['Monday\n',
-		'\tTuesday\n',
-		'\t\tWednesday\n',
-		'\t\t\tThursday\n',
-		'\t\t\t\tFriday\n',
-		'\t\t\t\t\tSaturday\n',
-		'\t\t\t\t\t\tSunday'];
-
-	console.clear();
-	console.log(langsArray[currentLanguage].join(''));
-	/* switch (currentLanguage) {
-		case 'ru':
-			console.log(
-				'Понедельник\n' +
-				'\tВторник\n' +
-				'\t\tСреда\n' +
-				'\t\t\tЧетверг\n' +
-				'\t\t\t\tПятница\n' +
-				'\t\t\t\t\tСуббота\n' +
-				'\t\t\t\t\t\tВоскресенье');
-			break;
-		case 'en':
-			console.log(
-				'Monday\n' +
-				'\tTuesday\n' +
-				'\t\tWednesday\n' +
-				'\t\t\tThursday\n' +
-				'\t\t\t\tFriday\n' +
-				'\t\t\t\t\tSaturday\n' +
-				'\t\t\t\t\t\tSunday'); 
-	}
-	*/
-	/* 
-	if (currentLanguage === 'ru') {
-		console.log(
-			'Понедельник\n' + 
-			'\tВторник\n' + 
-			'\t\tСреда\n' + 
-			'\t\t\tЧетверг\n' + 
-			'\t\t\t\tПятница\n' + 
-			'\t\t\t\t\tСуббота\n' + 
-			'\t\t\t\t\t\tВоскресенье');
-	} else {
-		console.log(
-			'Monday\n' + 
-			'\tTuesday\n' + 
-			'\t\tWednesday\n' + 
-			'\t\t\tThursday\n' + 
-			'\t\t\t\tFriday\n' + 
-			'\t\t\t\t\tSaturday\n' + 
-			'\t\t\t\t\t\tSunday');
-	} 
-*/
+const getData = () => {
+	return fetch(API_URL)
+		.then(res => {
+			if (res.status === 200) {
+				return res.json();
+			} else {
+				throw new Error("Произошла ошибка, данные не были найдены!");
+			}
+		})
+		.catch(error => {
+			error => console.warn(error)
+		});
 }
 
-languageSwitchBtn.addEventListener('click', switchLanguage);
-let langsArray = [];
-	langsArray.ru = [
-		'Понедельник\n',
-		'\tВторник\n',
-		'\t\tСреда\n',
-		'\t\t\tЧетверг\n',
-		'\t\t\t\tПятница\n',
-		'\t\t\t\t\tСуббота\n',
-		'\t\t\t\t\t\tВоскресенье'];
-	langsArray.en = ['Monday\n',
-		'\tTuesday\n',
-		'\t\tWednesday\n',
-		'\t\t\tThursday\n',
-		'\t\t\t\tFriday\n',
-		'\t\t\t\t\tSaturday\n',
-		'\t\t\t\t\t\tSunday'];
-console.log(langsArray);
-// * ======================== * \\
+const convertRubToOtherCurrency = (data, input, currency) => {
+	const rublesToUsdRate = data.rates.RUB;
 
-/* 2). У нас есть переменная namePerson. Если значение этой переменной “Артём” то вывести в консоль “директор”, если значение “Александр” то вывести в консоль “преподаватель”, с любым другим значением вывести в консоль “студент”
-	Решить задачу с помощью нескольких тернарных операторов, без использования if или switch  */
+	let result;
+	if (currency === 'USD') {
+		result = input / rublesToUsdRate;
+	} else {
+		const currencyRate = data.rates[currency];
+		result = input / rublesToUsdRate * currencyRate;
+	}
+	result = result.toFixed(2);
 
-let namePerson;
+	return result;
+}
 
-namePerson = 'Александр';
+const renderResult = (result, output1, output2) => {
+	if (output2.innerText !== '') output2.innerText = '';
+	output1.textContent = '';
+	output1.textContent = splitNumbers(result);
+}
 
-namePerson === 'Артём' ? console.log('директор') :
-	namePerson === 'Александр'
-		? console.log('преподаватель') :
-		console.log('студент');
+const splitNumbers = (str) => {
+	const regExp = /\B(?=(\d{3})+(?!\d))/g;
+	return str.replace(regExp, ' ');
+}
+
+const digitsOnly = (str) => {
+	const regExp = /\D+/g;
+	return str.replace(regExp, '');
+}
+
+currencyChoiceInputs.forEach(radioBtn =>
+	radioBtn.addEventListener('change', () => {
+		if (currentRubles === undefined) return;
+
+		currentCurrency = radioBtn.id.toUpperCase();
+
+		if (radioBtn.id === 'usd') {
+			getData()
+				.then(data =>
+					convertRubToOtherCurrency(data, currentRubles, currentCurrency))
+				.then(result =>
+					renderResult(result, currencyOutputs[0], currencyOutputs[1]));
+		} else {
+			getData()
+				.then(data =>
+					convertRubToOtherCurrency(data, currentRubles, currentCurrency))
+				.then(result =>
+					renderResult(result, currencyOutputs[1], currencyOutputs[0]));
+		}
+	})
+);
+
+userInput.addEventListener('input', () => {
+	userInput.value = digitsOnly(userInput.value);
+	userInput.value = splitNumbers(userInput.value);
+	currentRubles = Number(userInput.value.replace(/\s+/g, ''));
+	if (currentCurrency === 'USD') {
+		getData()
+			.then(data =>
+				convertRubToOtherCurrency(data, currentRubles, currentCurrency))
+			.then(result =>
+				renderResult(result, currencyOutputs[0], currencyOutputs[1]));
+	} else if (currentCurrency === 'EUR') {
+		getData()
+			.then(data =>
+				convertRubToOtherCurrency(data, currentRubles, currentCurrency))
+			.then(result =>
+				renderResult(result, currencyOutputs[1], currencyOutputs[0]));
+	}
+})
